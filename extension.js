@@ -59,11 +59,12 @@ const BackSlideEntry = new Lang.Class({
                 let array=res.images[0].url.split('\/');
                 let imageLocation=downloadsDir+'/'+array[array.length -1];
                 let file = Gio.file_new_for_path(imageLocation);
-                if (!file.query_exists(null))
+                if (!file.query_exists(null)){
                 	Util.spawn(['wget','-c','-O',imageLocation,imageUrl]);
-                let list = settings.getImageList();
-                list.push(imageLocation);
-                settings.setImageList(list);
+	                let list = settings.getImageList();
+        	        list.push(imageLocation);
+        	        settings.setImageList(list);
+		}
     		});
         }
         
