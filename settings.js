@@ -164,6 +164,34 @@ const Settings = new Lang.Class({
     },
     
     /**
+     * #SAAIE
+     * Add a path to the list path's to the wallpaper-files.
+     * @param image path.
+     */
+    addImage: function(image){
+	// validate:
+        if (image === undefined || image === null || typeof image !== "string"){
+            throw TypeError("image should be a string variable. Got: "+image);
+        }
+	let list=this._setting.get_strv(KEY_IMAGE_LIST);
+	for (let i=0; i < list.length; i++)	
+		if (image === list[i])
+			return;
+	list.push(image);
+	// Set:
+	let key = KEY_IMAGE_LIST;
+        if (this._setting.is_writable(key)){
+            if (this._setting.set_strv(key, list)){
+                Gio.Settings.sync();
+            } else {
+                throw this._errorSet(key);
+            }
+        } else {
+            throw this._errorWritable(key);
+        }
+    },
+    
+    /**
      * The list path's to the wallpaper-files.
      * @returns array list of wallpaper path's.
      */

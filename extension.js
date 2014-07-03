@@ -21,6 +21,7 @@ const _ = Gettext.gettext;
 
 //Directory path that Bing's images download to. #SAAIE
 let downloadsDir = GLib.get_home_dir() + "/.cache/bingbackslide";
+let settings;
 
 /**
  * The new entry in the gnome3 status-area.
@@ -59,12 +60,9 @@ const BackSlideEntry = new Lang.Class({
                 let array=res.images[0].url.split('\/');
                 let imageLocation=downloadsDir+'/'+array[array.length -1];
                 let file = Gio.file_new_for_path(imageLocation);
-                if (!file.query_exists(null)){
-                	Util.spawn(['wget','-c','-O',imageLocation,imageUrl]);
-	                let list = settings.getImageList();
-        	        list.push(imageLocation);
-        	        settings.setImageList(list);
-		}
+		if (!file.query_exists(null))
+			Util.spawn(['wget','-c','-O',imageLocation,imageUrl]);                
+    	       	settings.addImage(imageLocation);
     		});
         }
         
@@ -161,7 +159,6 @@ function init() {
 }
 
 let wallpaper_control;
-let settings;
 let timer;
 let menu_entry;
 
